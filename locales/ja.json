@@ -1,0 +1,20 @@
+{
+  "layout": {
+    "language": "言語",
+    "components": "コンポーネント"
+  },
+  "pages": {
+    "home": {
+      "title": "Shadcn Vue デモへようこそ",
+      "description": "これは Shadcn Vue コンポーネントのデモです。サイドバーのリンクをクリックして、さまざまなコンポーネントを探索してください。"
+    },
+    "buttons": {
+      "title": "ボタン",
+      "description": "さまざまなボタンのスタイルとバリエーション"
+    },
+    "select": {
+      "title": "セレクト",
+      "description": "さまざまな機能を持つドロップダウンセレクトコンポーネント"
+    }
+  }
+}

@@ -1,0 +1,206 @@
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 224.3 76.3% 48%;
+}
+
+/* Blue Theme */
+.theme-blue {
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 213.1 93.9% 67.8%;
+  --secondary-foreground: 210 40% 98%;
+  --ring: 221.2 83.2% 53.3%;
+}
+
+/* Red Theme */
+.theme-red {
+  --primary: 0 84.2% 60.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 0 84.2% 65.2%;
+  --secondary-foreground: 210 40% 98%;
+  --ring: 0 84.2% 60.2%;
+}
+
+/* Green Theme */
+.theme-green {
+  --primary: 142.1 76.2% 36.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 142.1 76.2% 46.3%;
+  --secondary-foreground: 210 40% 98%;
+  --ring: 142.1 76.2% 36.3%;
+}
+
+/* Orange Theme */
+.theme-orange {
+  --primary: 24.6 95% 53.1%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 24.6 95% 58.1%;
+  --secondary-foreground: 210 40% 98%;
+  --ring: 24.6 95% 53.1%;
+}
+
+/* Rose Theme */
+.theme-rose {
+  --primary: 346.8 77.2% 49.8%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 346.8 77.2% 54.8%;
+  --secondary-foreground: 210 40% 98%;
+  --ring: 346.8 77.2% 49.8%;
+}
+
+/* Zinc Theme */
+.theme-zinc {
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 5.9% 15%;
+  --secondary-foreground: 0 0% 98%;
+  --ring: 240 5.9% 10%;
+}
+
+/* Slate Theme */
+.theme-slate {
+  --primary: 215.4 16.3% 46.9%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 215.4 16.3% 51.9%;
+  --secondary-foreground: 0 0% 98%;
+  --ring: 215.4 16.3% 46.9%;
+}
+
+/* Stone Theme */
+.theme-stone {
+  --primary: 25 5.3% 44.7%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 25 5.3% 49.7%;
+  --secondary-foreground: 0 0% 98%;
+  --ring: 25 5.3% 44.7%;
+}
+
+/* Gray Theme */
+.theme-gray {
+  --primary: 220 8.9% 46.1%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 220 8.9% 51.1%;
+  --secondary-foreground: 0 0% 98%;
+  --ring: 220 8.9% 46.1%;
+}
+
+/* Neutral Theme */
+.theme-neutral {
+  --primary: 0 0% 45%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 50%;
+  --secondary-foreground: 0 0% 98%;
+  --ring: 0 0% 45%;
+}
+
+.dark {
+  & .theme-blue {
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 91.2% 64.8%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+  }
+
+  & .theme-red {
+    --primary: 0 72.2% 50.6%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 72.2% 55.6%;
+    --secondary-foreground: 0 0% 98%;
+  }
+
+  & .theme-green {
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+    --secondary: 142.1 70.6% 50.3%;
+    --secondary-foreground: 144.9 80.4% 10%;
+  }
+
+  & .theme-orange {
+    --primary: 20.5 90.2% 48.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 20.5 90.2% 53.2%;
+    --secondary-foreground: 210 40% 98%;
+  }
+
+  & .theme-rose {
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 346.8 77.2% 54.8%;
+    --secondary-foreground: 355.7 100% 97.3%;
+  }
+
+  & .theme-zinc {
+    --primary: 240 5.9% 90%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 5.9% 85%;
+    --secondary-foreground: 240 5.9% 10%;
+  }
+
+  & .theme-slate {
+    --primary: 215.4 16.3% 56.9%;
+    --primary-foreground: 215.4 16.3% 16.9%;
+    --secondary: 215.4 16.3% 51.9%;
+    --secondary-foreground: 215.4 16.3% 16.9%;
+  }
+
+  & .theme-stone {
+    --primary: 25 5.3% 54.7%;
+    --primary-foreground: 25 5.3% 14.7%;
+    --secondary: 25 5.3% 49.7%;
+    --secondary-foreground: 25 5.3% 14.7%;
+  }
+
+  & .theme-gray {
+    --primary: 220 8.9% 56.1%;
+    --primary-foreground: 220 8.9% 16.1%;
+    --secondary: 220 8.9% 51.1%;
+    --secondary-foreground: 220 8.9% 16.1%;
+  }
+
+  & .theme-neutral {
+    --primary: 0 0% 55%;
+    --primary-foreground: 0 0% 15%;
+    --secondary: 0 0% 50%;
+    --secondary-foreground: 0 0% 15%;
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "layout": {
+    "language": "语言",
+    "components": "组件"
+  },
+  "pages": {
+    "home": {
+      "title": "欢迎使用 Shadcn Vue 演示",
+      "description": "这是 Shadcn Vue 组件的演示。点击侧边栏链接探索不同的组件。"
+    },
+    "buttons": {
+      "title": "按钮",
+      "description": "各种按钮样式和变体"
+    },
+    "select": {
+      "title": "选择器",
+      "description": "具有各种功能的下拉选择组件"
+    }
+  }
+}

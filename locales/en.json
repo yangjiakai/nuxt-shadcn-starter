@@ -1,0 +1,20 @@
+{
+  "layout": {
+    "language": "Language",
+    "components": "Components"
+  },
+  "pages": {
+    "home": {
+      "title": "Welcome to Shadcn Vue Demo",
+      "description": "This is a demo of Shadcn Vue components. Click on the sidebar links to explore different components."
+    },
+    "buttons": {
+      "title": "Buttons",
+      "description": "Various button styles and variants"
+    },
+    "select": {
+      "title": "Select",
+      "description": "Dropdown select components with various features"
+    }
+  }
+}
