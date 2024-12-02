@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Waterfallflow from "~/components/common/WaterfallFlow.vue";
-import TopicControl from "~/components/common/TopicControl.vue";
 import Skeleton from "~/components/ui/skeleton/Skeleton.vue";
 import { useDebounceFn } from "@vueuse/core";
 import type {
@@ -12,45 +11,79 @@ import type {
 const { searchPhotos } = usePexels();
 
 // Search state
-const query = ref("nature");
+const defaultQuery = "wallpaper";
+const query = ref(defaultQuery);
+const orientation = ref<PhotoSearchParams["orientation"]>();
+const size = ref<PhotoSearchParams["size"]>();
+const color = ref<string>("");
 const page = ref(1);
 const per_page = ref(30);
 const allPhotos = ref<Photo[]>([]);
 const hasMore = ref(true);
 
+const debouncedQuery = ref(query.value);
+
+// Available options
+const orientationOptions = [
+  { label: "All", value: undefined },
+  { label: "Landscape", value: "landscape" },
+  { label: "Portrait", value: "portrait" },
+  { label: "Square", value: "square" },
+];
+
+const sizeOptions = [
+  { label: "All", value: undefined },
+  { label: "Large", value: "large" },
+  { label: "Medium", value: "medium" },
+  { label: "Small", value: "small" },
+];
+
+const colorOptions = [
+  { label: "All", value: "" },
+  { label: "Red", value: "red" },
+  { label: "Orange", value: "orange" },
+  { label: "Yellow", value: "yellow" },
+  { label: "Green", value: "green" },
+  { label: "Turquoise", value: "turquoise" },
+  { label: "Blue", value: "blue" },
+  { label: "Violet", value: "violet" },
+  { label: "Pink", value: "pink" },
+  { label: "Brown", value: "brown" },
+  { label: "Black", value: "black" },
+  { label: "Gray", value: "gray" },
+  { label: "White", value: "white" },
+];
+
+// Initial search function
+const performSearch = async (searchParams: PhotoSearchParams) => {
+  const result = await searchPhotos(searchParams);
+  if (result?.photos) {
+    if (page.value === 1) {
+      allPhotos.value = result.photos;
+    } else {
+      allPhotos.value = [...allPhotos.value, ...result.photos];
+    }
+    hasMore.value = allPhotos.value.length < (result.total_results || 0);
+  }
+  return result;
+};
+
 // Search response state
-const {
-  data: response,
-  status,
-  error,
-  refresh,
-  clear,
-} = await useAsyncData<PhotoSearchResponse>(
+const { data: response, status, error, refresh } = await useAsyncData<PhotoSearchResponse>(
   "photos",
-  () =>
-    searchPhotos({
-      query: query.value,
-      per_page: per_page.value,
-      page: page.value,
-    }),
+  () => performSearch({
+    query: query.value || defaultQuery,
+    orientation: orientation.value,
+    size: size.value,
+    color: color.value || undefined,
+    per_page: per_page.value,
+    page: page.value,
+  }),
   {
-    watch: [query, page, per_page],
+    immediate: true,
+    watch: [query, orientation, size, color, page, per_page],
   }
 );
-
-// Watch for response changes
-watch(response, (newResponse) => {
-  if (!newResponse?.photos) return;
-
-  if (page.value === 1) {
-    allPhotos.value = newResponse.photos;
-  } else {
-    allPhotos.value = [...allPhotos.value, ...newResponse.photos];
-  }
-
-  // Check if we have more photos to load
-  hasMore.value = allPhotos.value.length < (newResponse.total_results || 0);
-});
 
 // Computed photos for waterfall
 const photos = computed(() => {
@@ -66,17 +99,28 @@ const photos = computed(() => {
 
 const isLoading = computed(() => status.value === "pending");
 
-// Debounced search handler
-const handleSearch = useDebounceFn(async (newQuery: string) => {
-  if (!newQuery.trim()) return;
+// Debounced search handler with longer delay and optimizations
+const handleSearch = useDebounceFn((newQuery: string) => {
+  if (!newQuery.trim() || newQuery.trim() === debouncedQuery.value.trim()) return;
 
-  query.value = newQuery;
+  debouncedQuery.value = newQuery.trim();
+  query.value = newQuery.trim();
   page.value = 1;
   hasMore.value = true;
   allPhotos.value = [];
 
-  await refresh();
+  refresh();
 }, 1000);
+
+// Watch for actual query changes instead of using immediate refresh
+watch(
+  debouncedQuery,
+  async () => {
+    if (status.value === "pending") return;
+    await refresh();
+  },
+  { deep: true }
+);
 
 // Load more handler
 const loadMore = async () => {
@@ -88,13 +132,29 @@ const loadMore = async () => {
 
 // Reset search
 const resetSearch = () => {
-  query.value = "nature";
+  query.value = defaultQuery;
+  orientation.value = undefined;
+  size.value = undefined;
+  color.value = "";
   page.value = 1;
   hasMore.value = true;
   allPhotos.value = [];
-  clear();
   refresh();
 };
+
+// Handle filter changes
+const handleFilterChange = () => {
+  page.value = 1;
+  allPhotos.value = [];
+  refresh();
+};
+
+// Ensure initial search
+onMounted(() => {
+  if (!photos.value.length) {
+    refresh();
+  }
+});
 </script>
 
 <template>
@@ -109,6 +169,8 @@ const resetSearch = () => {
           Reset
         </button>
       </div>
+
+      <!-- Search Input -->
       <div class="relative">
         <input
           v-model="query"
@@ -123,6 +185,54 @@ const resetSearch = () => {
         >
           <Skeleton class="h-5 w-5 rounded-full" />
         </span>
+      </div>
+
+      <!-- Filters -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Orientation -->
+        <select
+          v-model="orientation"
+          class="w-full p-2 border rounded-lg"
+          @change="handleFilterChange"
+        >
+          <option
+            v-for="option in orientationOptions"
+            :key="option.value || 'all'"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+
+        <!-- Size -->
+        <select
+          v-model="size"
+          class="w-full p-2 border rounded-lg"
+          @change="handleFilterChange"
+        >
+          <option
+            v-for="option in sizeOptions"
+            :key="option.value || 'all'"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+
+        <!-- Color -->
+        <select
+          v-model="color"
+          class="w-full p-2 border rounded-lg"
+          @change="handleFilterChange"
+        >
+          <option
+            v-for="option in colorOptions"
+            :key="option.value || 'all'"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
       </div>
     </div>
 
