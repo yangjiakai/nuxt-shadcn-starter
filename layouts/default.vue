@@ -67,6 +67,17 @@ const navigationItems = [
     name: 'WaterfallFlow',
     path: '/flow',
     icon: 'lucide:image'
+  },
+  {
+    name: 'UnsplashTest',
+    path: '/unsplashTest',
+    icon: 'lucide:image'
+  },
+  // pexels
+  {
+    name: 'PexelsTest',
+    path: '/pexelsTest',
+    icon: 'lucide:image'
   }
 ]
 </script>

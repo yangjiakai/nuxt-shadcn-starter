@@ -139,8 +139,8 @@ const iconOptions = [
 ]
 
 // Reactive values for each select (storing only the value string)
-const basicValue = ref('')
-const iconValue = ref('')
-const disabledValue = ref('apple') // Pre-selected value
-const formValue = ref('')
+const basicValue = ref<string>('')
+const iconValue = ref<string>('')
+const disabledValue = ref<string>('apple') // Pre-selected value
+const formValue = ref<string>('')
 </script>

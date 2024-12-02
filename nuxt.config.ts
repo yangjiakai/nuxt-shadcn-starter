@@ -17,5 +17,12 @@ export default defineNuxtConfig({
   i18n: {
     vueI18n: './i18n.config.ts',
     strategy: 'no_prefix'
-  }
+  },
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: 'https://api.yunrobot.cn',
+    },
+    unsplashApiKey: process.env.UNSPLASH_API_KEY,
+    pexelsApiKey: process.env.PEXELS_API_KEY
+  },
 })
