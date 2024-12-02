@@ -3,7 +3,7 @@
     <!-- Sidebar -->
     <aside class="w-64 border-r bg-background">
       <div class="p-6">
-        <h2 class="text-lg font-semibold">{{ t('layout.logo') }}</h2>
+        <h2 class="text-lg font-semibold">{{ t("layout.logo") }}</h2>
       </div>
       <nav class="space-y-1 px-2">
         <NuxtLink
@@ -13,13 +13,19 @@
           :class="[
             'group flex items-center rounded-md px-3 py-2 text-sm font-medium',
             'hover:bg-accent hover:text-accent-foreground',
-            $route.path === item.path ? 'bg-accent text-accent-foreground' : 'text-foreground/60'
+            $route.path === item.path
+              ? 'bg-accent text-accent-foreground'
+              : 'text-foreground/60',
           ]"
         >
           <Icon
             :name="item.icon"
             class="mr-3 h-4 w-4"
-            :class="$route.path === item.path ? 'text-accent-foreground' : 'text-foreground/60'"
+            :class="
+              $route.path === item.path
+                ? 'text-accent-foreground'
+                : 'text-foreground/60'
+            "
           />
           {{ item.name }}
         </NuxtLink>
@@ -37,47 +43,53 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 const navigationItems = [
   {
-    name: 'Home',
-    path: '/',
-    icon: 'lucide:home'
+    name: "Home",
+    path: "/",
+    icon: "lucide:home",
   },
   {
-    name: 'Buttons',
-    path: '/buttonTest',
-    icon: 'lucide:mouse-pointer-click'
+    name: "Buttons",
+    path: "/buttonTest",
+    icon: "lucide:mouse-pointer-click",
   },
   {
-    name: 'Carousel',
-    path: '/carouselTest',
-    icon: 'lucide:image'
+    name: "Carousel",
+    path: "/carouselTest",
+    icon: "lucide:image",
   },
   {
-    name: 'Select',
-    path: '/selectTest',
-    icon: 'lucide:list-filter'
+    name: "Select",
+    path: "/selectTest",
+    icon: "lucide:list-filter",
   },
   // waterfallflow
   {
-    name: 'WaterfallFlow',
-    path: '/flow',
-    icon: 'lucide:image'
+    name: "WaterfallFlow",
+    path: "/flow",
+    icon: "lucide:image",
   },
   {
-    name: 'UnsplashTest',
-    path: '/unsplashTest',
-    icon: 'lucide:image'
+    name: "UnsplashTest",
+    path: "/unsplashTest",
+    icon: "lucide:image",
   },
   // pexels
   {
-    name: 'PexelsTest',
-    path: '/pexelsTest',
-    icon: 'lucide:image'
-  }
-]
+    name: "PexelsTest",
+    path: "/pexelsTest",
+    icon: "lucide:image",
+  },
+  // pexcelSearch
+  {
+    name: "PexelsSearch",
+    path: "/pexelsSearch",
+    icon: "lucide:image",
+  },
+];
 </script>

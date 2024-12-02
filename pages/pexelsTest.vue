@@ -32,7 +32,9 @@
             :alt="photo.alt"
             class="w-full h-64 object-cover rounded"
           />
-          <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2">
+          <div
+            class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2"
+          >
             <p>By: {{ photo.photographer }}</p>
           </div>
         </div>
@@ -52,11 +54,7 @@
       <!-- Videos Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div v-for="video in videos" :key="video.id" class="relative">
-          <video
-            :poster="video.image"
-            controls
-            class="w-full rounded"
-          >
+          <video :poster="video.image" controls class="w-full rounded">
             <source
               :src="video.video_files[0]?.link"
               :type="video.video_files[0]?.file_type"
@@ -91,7 +89,8 @@
           <h3 class="font-semibold">{{ collection.title }}</h3>
           <p>{{ collection.description }}</p>
           <p class="text-sm text-gray-600">
-            Photos: {{ collection.photos_count }} | Videos: {{ collection.videos_count }}
+            Photos: {{ collection.photos_count }} | Videos:
+            {{ collection.videos_count }}
           </p>
         </div>
       </div>
@@ -100,15 +99,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { PexelsPhoto, PexelsVideo, PexelsCollection } from '~/composables/usePexcels'
+import { ref } from "vue";
+import type {
+  PexelsPhoto,
+  PexelsVideo,
+  PexelsCollection,
+} from "~/composables/usePexels";
 
-const { loading, error, searchPhotos: searchPixcelsPhotos, getPopularVideos: getPixcelsVideos, getFeaturedCollections: getPixcelsCollections } = usePixcels()
+const {
+  loading,
+  error,
+  searchPhotos: searchPixcelsPhotos,
+  getPopularVideos: getPixcelsVideos,
+  getFeaturedCollections: getPixcelsCollections,
+} = usePixels();
 
-const searchQuery = ref('')
-const photos = ref<PexelsPhoto[]>([])
-const videos = ref<PexelsVideo[]>([])
-const collections = ref<PexelsCollection[]>([])
+const searchQuery = ref("");
+const photos = ref<PexelsPhoto[]>([]);
+const videos = ref<PexelsVideo[]>([]);
+const collections = ref<PexelsCollection[]>([]);
 
 // Search Photos
 async function searchPhotos() {
@@ -116,11 +125,11 @@ async function searchPhotos() {
     const response = await searchPixcelsPhotos({
       query: searchQuery.value,
       per_page: 9,
-      page: 1
-    })
-    photos.value = response.photos || []
+      page: 1,
+    });
+    photos.value = response.photos || [];
   } catch (e) {
-    console.error('Error searching photos:', e)
+    console.error("Error searching photos:", e);
   }
 }
 
@@ -129,11 +138,11 @@ async function getPopularVideos() {
   try {
     const response = await getPixcelsVideos({
       per_page: 4,
-      page: 1
-    })
-    videos.value = response.videos || []
+      page: 1,
+    });
+    videos.value = response.videos || [];
   } catch (e) {
-    console.error('Error getting videos:', e)
+    console.error("Error getting videos:", e);
   }
 }
 
@@ -142,11 +151,11 @@ async function getFeaturedCollections() {
   try {
     const response = await getPixcelsCollections({
       per_page: 5,
-      page: 1
-    })
-    collections.value = response.collections || []
+      page: 1,
+    });
+    collections.value = response.collections || [];
   } catch (e) {
-    console.error('Error getting collections:', e)
+    console.error("Error getting collections:", e);
   }
 }
 </script>

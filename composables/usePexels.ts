@@ -95,7 +95,7 @@ export interface PexelsCollection {
   videos_count: number
 }
 
-export function usePixcels() {
+export function usePexels() {
   const loading = ref(false)
   const error = ref<string | null>(null)
 

@@ -1,10 +1,20 @@
 <template>
-    <div class="container mx-auto px-4">
-      <!-- 瀑布流容器 -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <div 
-          v-for="(column, columnIndex) in columns" 
-          :key="columnIndex" 
+  <div class="container mx-auto px-4">
+    <!-- 瀑布流容器 -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
+      <template v-if="loading">
+        <div v-for="i in 4" :key="i" class="flex flex-col gap-4">
+          <div v-for="j in 3" :key="j">
+            <Skeleton class="h-[200px] w-full rounded-lg" />
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div
+          v-for="(column, columnIndex) in columns"
+          :key="columnIndex"
           class="flex flex-col gap-4"
         >
           <!-- 每列的图片项 -->
@@ -23,8 +33,12 @@
                 loading="lazy"
               />
               <!-- 图片信息遮罩 -->
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-end">
-                <div class="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <div
+                class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-end"
+              >
+                <div
+                  class="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+                >
                   <h3 class="text-lg font-semibold">{{ item.title }}</h3>
                   <p class="text-sm opacity-90">{{ item.description }}</p>
                 </div>
@@ -32,73 +46,80 @@
             </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, onMounted, watch } from 'vue'
-  import { useWindowSize } from '@vueuse/core'
-  
-  interface ImageItem {
-    id: number
-    url: string
-    title: string
-    description: string
-    width: number
-    height: number
-  }
-  
-  const props = defineProps<{
-    images: ImageItem[]
-  }>()
-  
-  const columns = ref<ImageItem[][]>([[], [], [], []])
-  const { width } = useWindowSize()
-  
-  // 获取当前应该显示的列数
-  const getColumnCount = (windowWidth: number): number => {
-    if (windowWidth < 640) return 1
-    if (windowWidth < 768) return 2
-    if (windowWidth < 1024) return 3
-    return 4
-  }
-  
-  // 重新分配图片到列
-  const redistributeImages = () => {
-    const columnCount = getColumnCount(width.value)
-    const newColumns: ImageItem[][] = Array(columnCount).fill(null).map(() => [])
-    
-    // 按照图片高宽比分配到各列，保持各列高度相近
-    let columnHeights = new Array(columnCount).fill(0)
-    
-    props.images.forEach(image => {
-      // 找出当前高度最小的列
-      const minHeight = Math.min(...columnHeights)
-      const columnIndex = columnHeights.indexOf(minHeight)
-      
-      // 将图片添加到该列
-      newColumns[columnIndex].push(image)
-      
-      // 更新列高度
-      columnHeights[columnIndex] += image.height / image.width
-    })
-    
-    columns.value = newColumns
-  }
-  
-  // 监听窗口大小变化
-  watch(width, () => {
-    redistributeImages()
-  })
-  
-  // 图片加载完成后的处理
-  const onImageLoad = (columnIndex: number, imageIndex: number) => {
-    // 可以在这里添加图片加载完成后的动画效果
-  }
-  
-  onMounted(() => {
-    redistributeImages()
-  })
-  </script>
-  
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useWindowSize } from "@vueuse/core";
+import Skeleton from "~/components/ui/skeleton/Skeleton.vue"; // Import Skeleton component
+
+interface ImageItem {
+  id: number;
+  url: string;
+  title: string;
+  description: string;
+  width: number;
+  height: number;
+}
+
+const props = defineProps<{
+  images: ImageItem[];
+  loading?: boolean;
+}>();
+
+const columns = ref<ImageItem[][]>([[], [], [], []]);
+const { width } = useWindowSize();
+
+// 获取当前应该显示的列数
+const getColumnCount = (windowWidth: number): number => {
+  if (windowWidth < 640) return 1;
+  if (windowWidth < 768) return 2;
+  if (windowWidth < 1024) return 3;
+  return 4;
+};
+
+// 重新分配图片到列
+const redistributeImages = () => {
+  const columnCount = getColumnCount(width.value);
+  const newColumns: ImageItem[][] = Array(columnCount)
+    .fill(null)
+    .map(() => []);
+
+  // 按照图片高宽比分配到各列，保持各列高度相近
+  let columnHeights = new Array(columnCount).fill(0);
+
+  props.images.forEach((image) => {
+    // 找出当前高度最小的列
+    const minHeight = Math.min(...columnHeights);
+    const columnIndex = columnHeights.indexOf(minHeight);
+
+    // 将图片添加到该列
+    newColumns[columnIndex].push(image);
+
+    // 更新列高度
+    columnHeights[columnIndex] += image.height / image.width;
+  });
+
+  columns.value = newColumns;
+};
+
+// 监听窗口大小变化和图片数据变化
+watch(
+  [width, () => props.images],
+  () => {
+    redistributeImages();
+  },
+  { deep: true }
+);
+
+// 图片加载完成后的处理
+const onImageLoad = (columnIndex: number, imageIndex: number) => {
+  // 可以在这里添加图片加载完成后的动画效果
+};
+
+onMounted(() => {
+  redistributeImages();
+});
+</script>
