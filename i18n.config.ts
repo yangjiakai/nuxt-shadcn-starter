@@ -21,7 +21,23 @@ export default defineI18nConfig(() => ({
         select: {
           title: 'Select',
           description: 'Dropdown select components with various features'
-        }
+        },
+        index: {
+          title: 'Home',
+        },
+        button: {
+          title: 'Button',
+          variants: 'Button Variants',
+          sizes: 'Button Sizes',
+          icons: 'Button with Icons',
+          loading: 'Loading Button',
+        },
+        carousel: {
+          title: 'Carousel',
+          basic: 'Basic Carousel',
+          thumbnails: 'Carousel with Thumbnails',
+          api: 'Carousel with API Control',
+        },
       }
     },
     zh: {
@@ -43,7 +59,23 @@ export default defineI18nConfig(() => ({
         select: {
           title: '选择器',
           description: '具有各种功能的下拉选择组件'
-        }
+        },
+        index: {
+          title: '首页',
+        },
+        button: {
+          title: '按钮',
+          variants: '按钮变体',
+          sizes: '按钮大小',
+          icons: '带图标的按钮',
+          loading: '加载按钮',
+        },
+        carousel: {
+          title: '轮播',
+          basic: '基本轮播',
+          thumbnails: '带缩略图的轮播',
+          api: '带 API 控制的轮播',
+        },
       }
     },
     ja: {
@@ -65,7 +97,23 @@ export default defineI18nConfig(() => ({
         select: {
           title: 'セレクト',
           description: 'さまざまな機能を持つドロップダウンセレクトコンポーネント'
-        }
+        },
+        index: {
+          title: 'ホーム',
+        },
+        button: {
+          title: 'ボタン',
+          variants: 'ボタンのバリエーション',
+          sizes: 'ボタンのサイズ',
+          icons: 'アイコン付きボタン',
+          loading: 'ローディングボタン',
+        },
+        carousel: {
+          title: 'カーセル',
+          basic: '基本的なカーセル',
+          thumbnails: 'サムネイル付きカーセル',
+          api: 'API制御のカーセル',
+        },
       }
     }
   }

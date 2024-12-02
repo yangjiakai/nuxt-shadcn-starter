@@ -53,9 +53,20 @@ const navigationItems = [
     icon: 'lucide:mouse-pointer-click'
   },
   {
+    name: 'Carousel',
+    path: '/carouselTest',
+    icon: 'lucide:image'
+  },
+  {
     name: 'Select',
     path: '/selectTest',
     icon: 'lucide:list-filter'
+  },
+  // waterfallflow
+  {
+    name: 'WaterfallFlow',
+    path: '/flow',
+    icon: 'lucide:image'
   }
 ]
 </script>
