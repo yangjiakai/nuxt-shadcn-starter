@@ -1,173 +1,15 @@
-<script setup lang="ts">
-import Waterfallflow from "~/components/common/WaterfallFlow.vue";
-import Skeleton from "~/components/ui/skeleton/Skeleton.vue";
-import { useDebounceFn } from "@vueuse/core";
-import type {
-  Photo,
-  PhotoSearchParams,
-  PhotoSearchResponse,
-} from "~/types/pexels";
-
-const { searchPhotos } = usePexels();
-
-// Search state
-const defaultQuery = "wallpaper";
-const query = ref(defaultQuery);
-const orientation = ref<PhotoSearchParams["orientation"]>();
-const size = ref<PhotoSearchParams["size"]>();
-const color = ref<string>("");
-const page = ref(1);
-const per_page = ref(30);
-const allPhotos = ref<Photo[]>([]);
-const hasMore = ref(true);
-
-const debouncedQuery = ref(query.value);
-
-// Available options
-const orientationOptions = [
-  { label: "All", value: undefined },
-  { label: "Landscape", value: "landscape" },
-  { label: "Portrait", value: "portrait" },
-  { label: "Square", value: "square" },
-];
-
-const sizeOptions = [
-  { label: "All", value: undefined },
-  { label: "Large", value: "large" },
-  { label: "Medium", value: "medium" },
-  { label: "Small", value: "small" },
-];
-
-const colorOptions = [
-  { label: "All", value: "" },
-  { label: "Red", value: "red" },
-  { label: "Orange", value: "orange" },
-  { label: "Yellow", value: "yellow" },
-  { label: "Green", value: "green" },
-  { label: "Turquoise", value: "turquoise" },
-  { label: "Blue", value: "blue" },
-  { label: "Violet", value: "violet" },
-  { label: "Pink", value: "pink" },
-  { label: "Brown", value: "brown" },
-  { label: "Black", value: "black" },
-  { label: "Gray", value: "gray" },
-  { label: "White", value: "white" },
-];
-
-// Initial search function
-const performSearch = async (searchParams: PhotoSearchParams) => {
-  const result = await searchPhotos(searchParams);
-  if (result?.photos) {
-    if (page.value === 1) {
-      allPhotos.value = result.photos;
-    } else {
-      allPhotos.value = [...allPhotos.value, ...result.photos];
-    }
-    hasMore.value = allPhotos.value.length < (result.total_results || 0);
-  }
-  return result;
-};
-
-// Search response state
-const { data: response, status, error, refresh } = await useAsyncData<PhotoSearchResponse>(
-  "photos",
-  () => performSearch({
-    query: query.value || defaultQuery,
-    orientation: orientation.value,
-    size: size.value,
-    color: color.value || undefined,
-    per_page: per_page.value,
-    page: page.value,
-  }),
-  {
-    immediate: true,
-    watch: [query, orientation, size, color, page, per_page],
-  }
-);
-
-// Computed photos for waterfall
-const photos = computed(() => {
-  return allPhotos.value.map((photo: Photo) => ({
-    id: photo.id,
-    url: photo.src.large,
-    title: photo.photographer,
-    description: photo.alt,
-    width: photo.width,
-    height: photo.height,
-  }));
-});
-
-const isLoading = computed(() => status.value === "pending");
-
-// Debounced search handler with longer delay and optimizations
-const handleSearch = useDebounceFn((newQuery: string) => {
-  if (!newQuery.trim() || newQuery.trim() === debouncedQuery.value.trim()) return;
-
-  debouncedQuery.value = newQuery.trim();
-  query.value = newQuery.trim();
-  page.value = 1;
-  hasMore.value = true;
-  allPhotos.value = [];
-
-  refresh();
-}, 1000);
-
-// Watch for actual query changes instead of using immediate refresh
-watch(
-  debouncedQuery,
-  async () => {
-    if (status.value === "pending") return;
-    await refresh();
-  },
-  { deep: true }
-);
-
-// Load more handler
-const loadMore = async () => {
-  if (!hasMore.value || status.value === "pending") return;
-
-  page.value++;
-  await refresh();
-};
-
-// Reset search
-const resetSearch = () => {
-  query.value = defaultQuery;
-  orientation.value = undefined;
-  size.value = undefined;
-  color.value = "";
-  page.value = 1;
-  hasMore.value = true;
-  allPhotos.value = [];
-  refresh();
-};
-
-// Handle filter changes
-const handleFilterChange = () => {
-  page.value = 1;
-  allPhotos.value = [];
-  refresh();
-};
-
-// Ensure initial search
-onMounted(() => {
-  if (!photos.value.length) {
-    refresh();
-  }
-});
-</script>
-
 <template>
   <div class="container mx-auto p-8">
     <div class="mb-6 space-y-4">
       <div class="flex items-center justify-between">
         <h1 class="text-2xl font-bold">Pexels Photo Search</h1>
-        <button
+        <!-- <button
           @click="resetSearch"
           class="px-4 py-2 text-sm rounded-lg bg-secondary hover:bg-secondary/90"
         >
           Reset
-        </button>
+        </button> -->
+        <Button variant="secondary" @click="resetSearch"> Reset </Button>
       </div>
 
       <!-- Search Input -->
@@ -248,18 +90,176 @@ onMounted(() => {
     </div>
 
     <Waterfallflow
-      v-else
       :images="photos"
       :loading="isLoading"
       :has-more="hasMore"
       @load-more="loadMore"
     />
-
-    <div
-      v-if="!hasMore && photos.length > 0"
-      class="text-center mt-8 text-gray-500"
-    >
-      No more photos to load
-    </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import Waterfallflow from "~/components/common/WaterfallFlow.vue";
+import Skeleton from "~/components/ui/skeleton/Skeleton.vue";
+import { useDebounceFn } from "@vueuse/core";
+import type {
+  Photo,
+  PhotoSearchParams,
+  PhotoSearchResponse,
+} from "~/types/pexels";
+import Button from "~/components/ui/button/Button.vue";
+
+const { searchPhotos } = usePexels();
+
+// Search state
+const defaultQuery = "wallpaper";
+const query = ref(defaultQuery);
+const orientation = ref<PhotoSearchParams["orientation"]>();
+const size = ref<PhotoSearchParams["size"]>();
+const color = ref<string>("");
+const page = ref(1);
+const per_page = ref(30);
+const allPhotos = ref<Photo[]>([]);
+const hasMore = ref(true);
+
+const debouncedQuery = ref(query.value);
+
+// Available options
+const orientationOptions = [
+  { label: "All", value: undefined },
+  { label: "Landscape", value: "landscape" },
+  { label: "Portrait", value: "portrait" },
+  { label: "Square", value: "square" },
+];
+
+const sizeOptions = [
+  { label: "All", value: undefined },
+  { label: "Large", value: "large" },
+  { label: "Medium", value: "medium" },
+  { label: "Small", value: "small" },
+];
+
+const colorOptions = [
+  { label: "All", value: "" },
+  { label: "Red", value: "red" },
+  { label: "Orange", value: "orange" },
+  { label: "Yellow", value: "yellow" },
+  { label: "Green", value: "green" },
+  { label: "Turquoise", value: "turquoise" },
+  { label: "Blue", value: "blue" },
+  { label: "Violet", value: "violet" },
+  { label: "Pink", value: "pink" },
+  { label: "Brown", value: "brown" },
+  { label: "Black", value: "black" },
+  { label: "Gray", value: "gray" },
+  { label: "White", value: "white" },
+];
+
+// Search function
+const performSearch = async (searchParams: PhotoSearchParams) => {
+  const result = await searchPhotos(searchParams);
+  if (result?.photos) {
+    if (page.value === 1) {
+      allPhotos.value = result.photos;
+    } else {
+      allPhotos.value = [...allPhotos.value, ...result.photos];
+    }
+    hasMore.value = allPhotos.value.length < (result.total_results || 0);
+  }
+  return result;
+};
+
+// Search response state
+const {
+  data: response,
+  status,
+  error,
+  refresh,
+} = await useAsyncData<PhotoSearchResponse>(
+  "photos",
+  () =>
+    performSearch({
+      query: query.value || defaultQuery,
+      orientation: orientation.value,
+      size: size.value,
+      color: color.value || undefined,
+      per_page: per_page.value,
+      page: page.value,
+    }),
+  {
+    immediate: true,
+    watch: [query, orientation, size, color, page, per_page],
+  }
+);
+
+// Computed photos for waterfall
+const photos = computed(() => {
+  return allPhotos.value.map((photo: Photo) => ({
+    id: photo.id,
+    url: photo.src.large,
+    title: photo.photographer,
+    description: photo.alt,
+    width: photo.width,
+    height: photo.height,
+  }));
+});
+
+const isLoading = computed(() => status.value === "pending");
+
+// Debounced search handler
+const handleSearch = useDebounceFn((newQuery: string) => {
+  if (!newQuery.trim() || newQuery.trim() === debouncedQuery.value.trim())
+    return;
+
+  debouncedQuery.value = newQuery.trim();
+  query.value = newQuery.trim();
+  page.value = 1;
+  hasMore.value = true;
+  allPhotos.value = [];
+  refresh();
+}, 1000);
+
+// Watch for query changes
+watch(
+  debouncedQuery,
+  async () => {
+    if (status.value === "pending") return;
+    await refresh();
+  },
+  { deep: true }
+);
+
+// Load more handler
+const loadMore = async () => {
+  if (!hasMore.value || isLoading.value) return;
+
+  try {
+    page.value++;
+    await refresh();
+  } catch (err) {
+    console.error("Error loading more photos:", err);
+    page.value--;
+    hasMore.value = false;
+  }
+};
+
+// Reset search
+const resetSearch = () => {
+  query.value = defaultQuery;
+  orientation.value = undefined;
+  size.value = undefined;
+  color.value = "";
+  page.value = 1;
+  hasMore.value = true;
+  allPhotos.value = [];
+  refresh();
+};
+
+// Handle filter changes
+const handleFilterChange = () => {
+  page.value = 1;
+  hasMore.value = true;
+  allPhotos.value = [];
+  refresh();
+};
+</script>
