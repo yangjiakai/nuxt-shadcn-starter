@@ -156,7 +156,7 @@ const colorOptions = [
 ];
 
 // Search function
-const performSearch = async (searchParams: PhotoSearchParams) => {
+const performSearch = async (searchParams: any) => {
   const result = await searchPhotos(searchParams);
   if (result?.photos) {
     if (page.value === 1) {

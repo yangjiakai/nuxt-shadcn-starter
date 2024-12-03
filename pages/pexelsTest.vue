@@ -112,7 +112,7 @@ const {
   searchPhotos: searchPixcelsPhotos,
   getPopularVideos: getPixcelsVideos,
   getFeaturedCollections: getPixcelsCollections,
-} = usePixels();
+} = usePexels();
 
 const searchQuery = ref("");
 const photos = ref<PexelsPhoto[]>([]);

@@ -13,14 +13,22 @@
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Fruits</SelectLabel>
-              <SelectItem v-for="option in basicOptions" :key="option.value" :value="option.value">
+              <SelectItem
+                v-for="option in basicOptions"
+                :key="option.value"
+                :value="option.value"
+              >
                 {{ option.label }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
         <p class="mt-2 text-sm text-gray-500">
-          Selected value: {{ basicOptions.find(opt => opt.value === basicValue)?.label || 'None' }}
+          Selected value:
+          {{
+            basicOptions.find((opt) => opt.value === basicValue)?.label ||
+            "None"
+          }}
         </p>
       </div>
     </div>
@@ -34,8 +42,16 @@
             <SelectValue>
               <template #default>
                 <div v-if="iconValue" class="flex items-center gap-2">
-                  <Icon :name="iconOptions.find(opt => opt.value === iconValue)?.icon" class="h-4 w-4" />
-                  <span>{{ iconOptions.find(opt => opt.value === iconValue)?.label }}</span>
+                  <Icon
+                    :name="
+                      iconOptions.find((opt) => opt.value === iconValue)
+                        ?.icon || 'lucide:smile'
+                    "
+                    class="h-4 w-4"
+                  />
+                  <span>{{
+                    iconOptions.find((opt) => opt.value === iconValue)?.label
+                  }}</span>
                 </div>
                 <div v-else class="flex items-center gap-2">
                   <Icon name="lucide:smile" class="h-4 w-4" />
@@ -47,7 +63,11 @@
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Moods</SelectLabel>
-              <SelectItem v-for="option in iconOptions" :key="option.value" :value="option.value">
+              <SelectItem
+                v-for="option in iconOptions"
+                :key="option.value"
+                :value="option.value"
+              >
                 <div class="flex items-center gap-2">
                   <Icon :name="option.icon" class="h-4 w-4" />
                   {{ option.label }}
@@ -57,7 +77,10 @@
           </SelectContent>
         </Select>
         <p class="mt-2 text-sm text-gray-500">
-          Selected mood: {{ iconOptions.find(opt => opt.value === iconValue)?.label || 'None' }}
+          Selected mood:
+          {{
+            iconOptions.find((opt) => opt.value === iconValue)?.label || "None"
+          }}
         </p>
       </div>
     </div>
@@ -73,7 +96,11 @@
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Fruits</SelectLabel>
-              <SelectItem v-for="option in basicOptions" :key="option.value" :value="option.value">
+              <SelectItem
+                v-for="option in basicOptions"
+                :key="option.value"
+                :value="option.value"
+              >
                 {{ option.label }}
               </SelectItem>
             </SelectGroup>
@@ -94,14 +121,21 @@
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Fruits</SelectLabel>
-              <SelectItem v-for="option in basicOptions" :key="option.value" :value="option.value">
+              <SelectItem
+                v-for="option in basicOptions"
+                :key="option.value"
+                :value="option.value"
+              >
                 {{ option.label }}
               </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
         <p class="mt-2 text-sm text-muted-foreground">
-          Selected: {{ basicOptions.find(opt => opt.value === formValue)?.label || 'None' }}
+          Selected:
+          {{
+            basicOptions.find((opt) => opt.value === formValue)?.label || "None"
+          }}
         </p>
       </div>
     </div>
@@ -109,7 +143,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 import {
   Select,
   SelectContent,
@@ -118,29 +152,29 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../components/ui/select'
-import { Label } from '../components/ui/label'
+} from "../components/ui/select";
+import { Label } from "../components/ui/label";
 
 // Basic options
 const basicOptions = [
-  { value: 'apple', label: 'Apple' },
-  { value: 'banana', label: 'Banana' },
-  { value: 'orange', label: 'Orange' },
-  { value: 'grape', label: 'Grape' },
-  { value: 'strawberry', label: 'Strawberry' },
-]
+  { value: "apple", label: "Apple" },
+  { value: "banana", label: "Banana" },
+  { value: "orange", label: "Orange" },
+  { value: "grape", label: "Grape" },
+  { value: "strawberry", label: "Strawberry" },
+];
 
 // Options with icons
 const iconOptions = [
-  { value: 'happy', label: 'Happy', icon: 'lucide:smile' },
-  { value: 'sad', label: 'Sad', icon: 'lucide:frown' },
-  { value: 'excited', label: 'Excited', icon: 'lucide:party-popper' },
-  { value: 'calm', label: 'Calm', icon: 'lucide:coffee' },
-]
+  { value: "happy", label: "Happy", icon: "lucide:smile" },
+  { value: "sad", label: "Sad", icon: "lucide:frown" },
+  { value: "excited", label: "Excited", icon: "lucide:party-popper" },
+  { value: "calm", label: "Calm", icon: "lucide:coffee" },
+];
 
 // Reactive values for each select (storing only the value string)
-const basicValue = ref<string>('')
-const iconValue = ref<string>('')
-const disabledValue = ref<string>('apple') // Pre-selected value
-const formValue = ref<string>('')
+const basicValue = ref<string>("");
+const iconValue = ref<string>("");
+const disabledValue = ref<string>("apple"); // Pre-selected value
+const formValue = ref<string>("");
 </script>
