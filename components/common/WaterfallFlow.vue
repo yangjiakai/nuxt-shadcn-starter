@@ -1,7 +1,9 @@
 <template>
   <div class="container mx-auto px-4">
     <!-- 瀑布流容器 -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
       <template v-if="loading && !hasImages">
         <div v-for="i in 4" :key="i" class="flex flex-col gap-4">
           <div v-for="j in 3" :key="j">
@@ -27,8 +29,12 @@
                 class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"
               />
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-end">
-                <div class="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <div
+                class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-300 flex items-end"
+              >
+                <div
+                  class="p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+                >
                   <h3 class="text-lg font-semibold">{{ item.title }}</h3>
                   <p class="text-sm opacity-90">{{ item.description }}</p>
                 </div>
@@ -40,7 +46,7 @@
     </div>
 
     <!-- 加载触发器和加载指示器 -->
-    <div 
+    <div
       ref="loadTriggerRef"
       class="w-full h-20 flex items-center justify-center mt-4"
     >
@@ -59,7 +65,7 @@ import { useWindowSize, useIntersectionObserver } from "@vueuse/core";
 import Skeleton from "~/components/ui/skeleton/Skeleton.vue";
 
 interface ImageItem {
-  id: number;
+  id: number | string;
   url: string;
   title: string;
   description: string;
@@ -74,7 +80,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'load-more'): void;
+  (e: "load-more"): void;
 }>();
 
 const columns = ref<ImageItem[][]>([[], [], [], []]);
@@ -125,17 +131,22 @@ watch(
 const { stop } = useIntersectionObserver(
   loadTriggerRef,
   ([{ isIntersecting }]) => {
-    if (isIntersecting && !loadingMore.value && !props.loading && props.hasMore) {
+    if (
+      isIntersecting &&
+      !loadingMore.value &&
+      !props.loading &&
+      props.hasMore
+    ) {
       loadingMore.value = true;
-      emit('load-more');
+      emit("load-more");
       setTimeout(() => {
         loadingMore.value = false;
       }, 500);
     }
   },
-  { 
+  {
     threshold: 0.5,
-    rootMargin: '100px'
+    rootMargin: "100px",
   }
 );
 

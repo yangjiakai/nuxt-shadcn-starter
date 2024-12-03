@@ -91,5 +91,17 @@ const navigationItems = [
     path: "/pexelsSearch",
     icon: "lucide:image",
   },
+  // wallhavenTest
+  {
+    name: "WallhavenTest",
+    path: "/wallhavenTest",
+    icon: "lucide:image",
+  },
+  // wallhavenSearch
+  {
+    name: "WallhavenSearch",
+    path: "/wallhavenSearch",
+    icon: "lucide:image",
+  },
 ];
 </script>

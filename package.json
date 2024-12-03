@@ -13,7 +13,7 @@
     "@nuxtjs/i18n": "^9.1.0",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@radix-icons/vue": "^1.0.0",
-    "@vueuse/core": "^11.2.0",
+    "@vueuse/core": "^11.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-vue": "^8.4.0",
