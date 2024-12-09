@@ -7,7 +7,7 @@
 
       <!-- Filters Panel -->
       <div
-        class="bg-white-50 dark:bg-gray-800 rounded-lg p-2 shadow-sm border mb-5"
+        class="bg-white-50 dark:bg-gray-900 rounded-lg p-2 shadow-sm border mb-5"
       >
         <!-- Search Input with Icon -->
 
