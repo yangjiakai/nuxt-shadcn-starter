@@ -1,80 +1,142 @@
 <template>
   <div class="container mx-auto p-8">
     <div class="mb-6 space-y-4">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold">Pexels Photo Search</h1>
-        <!-- <button
-          @click="resetSearch"
-          class="px-4 py-2 text-sm rounded-lg bg-secondary hover:bg-secondary/90"
-        >
-          Reset
-        </button> -->
-        <Button variant="secondary" @click="resetSearch"> Reset </Button>
       </div>
 
-      <!-- Search Input -->
-      <div class="relative">
-        <input
-          v-model="query"
-          type="text"
-          placeholder="Search photos..."
-          class="w-full p-3 pr-10 border rounded-lg shadow-sm focus:ring-2 focus:ring-primary focus:border-primary"
-          @input="(e) => handleSearch((e.target as HTMLInputElement).value)"
-        />
-        <span
-          v-if="isLoading"
-          class="absolute right-3 top-1/2 -translate-y-1/2"
-        >
-          <Skeleton class="h-5 w-5 rounded-full" />
-        </span>
-      </div>
+      <!-- Filters Panel -->
+      <div
+        class="bg-white-50 dark:bg-gray-800 rounded-lg p-2 shadow-sm border mb-5"
+      >
+        <!-- Search Input with Icon -->
 
-      <!-- Filters -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Orientation -->
-        <select
-          v-model="orientation"
-          class="w-full p-2 border rounded-lg"
-          @change="handleFilterChange"
-        >
-          <option
-            v-for="option in orientationOptions"
-            :key="option.value || 'all'"
-            :value="option.value"
-          >
-            {{ option.label }}
-          </option>
-        </select>
+        <!-- Filters Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-2">
+          <div class="relative">
+            <Input
+              v-model="query"
+              type="text"
+              placeholder="Search photos..."
+              class="pl-9"
+              @input="(e:Event) => handleSearch((e.target as HTMLInputElement).value)"
+            />
+            <Icon
+              name="heroicons:magnifying-glass"
+              class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
+          </div>
 
-        <!-- Size -->
-        <select
-          v-model="size"
-          class="w-full p-2 border rounded-lg"
-          @change="handleFilterChange"
-        >
-          <option
-            v-for="option in sizeOptions"
-            :key="option.value || 'all'"
-            :value="option.value"
+          <!-- Orientation Filter -->
+          <Select
+            v-model="orientation"
+            @update:modelValue="handleFilterChange"
+            class="w-full"
           >
-            {{ option.label }}
-          </option>
-        </select>
+            <SelectTrigger class="bg-background/50 border-dashed">
+              <Icon
+                name="heroicons:camera"
+                class="w-4 h-4 mr-2 text-muted-foreground"
+              />
+              <SelectValue :placeholder="'Orientation'" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  v-for="option in orientationOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-        <!-- Color -->
-        <select
-          v-model="color"
-          class="w-full p-2 border rounded-lg"
-          @change="handleFilterChange"
-        >
-          <option
-            v-for="option in colorOptions"
-            :key="option.value || 'all'"
-            :value="option.value"
+          <!-- Size Filter -->
+          <Select
+            v-model="size"
+            @update:modelValue="handleFilterChange"
+            class="w-full"
           >
-            {{ option.label }}
-          </option>
-        </select>
+            <SelectTrigger class="bg-background/50 border-dashed">
+              <Icon
+                name="heroicons:squares-2x2"
+                class="w-4 h-4 mr-2 text-muted-foreground"
+              />
+              <SelectValue :placeholder="'Size'" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  v-for="option in sizeOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  {{ option.label }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <!-- Color Filter -->
+          <Select
+            v-model="color"
+            @update:modelValue="handleFilterChange"
+            class="w-full"
+          >
+            <SelectTrigger class="bg-background/50 border-dashed">
+              <Icon
+                name="heroicons:swatch"
+                class="w-4 h-4 mr-2 text-muted-foreground"
+              />
+              <SelectValue :placeholder="'Color'" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  v-for="option in colorOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
+                  <div class="flex items-center gap-2">
+                    <div
+                      v-if="option.value !== 'all'"
+                      class="w-3 h-3 rounded-full border border-border/50"
+                      :class="{
+                        'bg-red-500': option.value === 'red',
+                        'bg-orange-500': option.value === 'orange',
+                        'bg-yellow-500': option.value === 'yellow',
+                        'bg-green-500': option.value === 'green',
+                        'bg-cyan-500': option.value === 'turquoise',
+                        'bg-blue-500': option.value === 'blue',
+                        'bg-violet-500': option.value === 'violet',
+                        'bg-pink-500': option.value === 'pink',
+                        'bg-amber-800': option.value === 'brown',
+                        'bg-black dark:bg-white': option.value === 'black',
+                        'bg-gray-500': option.value === 'gray',
+                        'bg-white dark:bg-black border-border':
+                          option.value === 'white',
+                      }"
+                    ></div>
+                    {{ option.label }}
+                  </div>
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <!-- Reset Button -->
+          <Button
+            variant="outline"
+            @click="resetSearch"
+            class="border border-dashed"
+          >
+            <Icon name="heroicons:arrow-path" class="w-4 h-4" />
+
+            Reset Filters
+          </Button>
+        </div>
       </div>
     </div>
 
@@ -101,6 +163,15 @@
 <script setup lang="ts">
 import Waterfallflow from "~/components/common/WaterfallFlow.vue";
 import Skeleton from "~/components/ui/skeleton/Skeleton.vue";
+import { Input } from "~/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { useDebounceFn } from "@vueuse/core";
 import type {
   Photo,
@@ -108,6 +179,7 @@ import type {
   PhotoSearchResponse,
 } from "~/types/pexels";
 import Button from "~/components/ui/button/Button.vue";
+
 definePageMeta({
   layout: "gallery",
 });
@@ -116,9 +188,9 @@ const { searchPhotos } = usePexels();
 // Search state
 const defaultQuery = "wallpaper";
 const query = ref(defaultQuery);
-const orientation = ref<PhotoSearchParams["orientation"]>();
-const size = ref<PhotoSearchParams["size"]>();
-const color = ref<string>("");
+const orientation = ref<string>("all");
+const size = ref<string>("all");
+const color = ref<string>("all");
 const page = ref(1);
 const per_page = ref(30);
 const allPhotos = ref<Photo[]>([]);
@@ -128,21 +200,21 @@ const debouncedQuery = ref(query.value);
 
 // Available options
 const orientationOptions = [
-  { label: "All", value: undefined },
+  { label: "All Orientations", value: "all" },
   { label: "Landscape", value: "landscape" },
   { label: "Portrait", value: "portrait" },
   { label: "Square", value: "square" },
 ];
 
 const sizeOptions = [
-  { label: "All", value: undefined },
+  { label: "All Sizes", value: "all" },
   { label: "Large", value: "large" },
   { label: "Medium", value: "medium" },
   { label: "Small", value: "small" },
 ];
 
 const colorOptions = [
-  { label: "All", value: "" },
+  { label: "All Colors", value: "all" },
   { label: "Red", value: "red" },
   { label: "Orange", value: "orange" },
   { label: "Yellow", value: "yellow" },
@@ -157,7 +229,7 @@ const colorOptions = [
   { label: "White", value: "white" },
 ];
 
-// Search function
+// Search function and rest of the script setup remains the same...
 const performSearch = async (searchParams: any) => {
   const result = await searchPhotos(searchParams);
   if (result?.photos) {
@@ -171,7 +243,6 @@ const performSearch = async (searchParams: any) => {
   return result;
 };
 
-// Search response state
 const {
   data: response,
   status,
@@ -182,9 +253,9 @@ const {
   () =>
     performSearch({
       query: query.value || defaultQuery,
-      orientation: orientation.value,
-      size: size.value,
-      color: color.value || undefined,
+      orientation: orientation.value === "all" ? undefined : orientation.value,
+      size: size.value === "all" ? undefined : size.value,
+      color: color.value === "all" ? undefined : color.value,
       per_page: per_page.value,
       page: page.value,
     }),
@@ -194,7 +265,6 @@ const {
   }
 );
 
-// Computed photos for waterfall
 const photos = computed(() => {
   return allPhotos.value.map((photo: Photo) => ({
     id: photo.id,
@@ -208,7 +278,6 @@ const photos = computed(() => {
 
 const isLoading = computed(() => status.value === "pending");
 
-// Debounced search handler
 const handleSearch = useDebounceFn((newQuery: string) => {
   if (!newQuery.trim() || newQuery.trim() === debouncedQuery.value.trim())
     return;
@@ -221,7 +290,6 @@ const handleSearch = useDebounceFn((newQuery: string) => {
   refresh();
 }, 1000);
 
-// Watch for query changes
 watch(
   debouncedQuery,
   async () => {
@@ -231,7 +299,6 @@ watch(
   { deep: true }
 );
 
-// Load more handler
 const loadMore = async () => {
   if (!hasMore.value || isLoading.value) return;
 
@@ -245,23 +312,29 @@ const loadMore = async () => {
   }
 };
 
-// Reset search
 const resetSearch = () => {
   query.value = defaultQuery;
-  orientation.value = undefined;
-  size.value = undefined;
-  color.value = "";
+  orientation.value = "all";
+  size.value = "all";
+  color.value = "all";
   page.value = 1;
   hasMore.value = true;
   allPhotos.value = [];
   refresh();
 };
 
-// Handle filter changes
 const handleFilterChange = () => {
   page.value = 1;
   hasMore.value = true;
   allPhotos.value = [];
+  const params = {
+    query: query.value || defaultQuery,
+    orientation: orientation.value === "all" ? undefined : orientation.value,
+    size: size.value === "all" ? undefined : size.value,
+    color: color.value === "all" ? undefined : color.value,
+    per_page: per_page.value,
+    page: page.value,
+  };
   refresh();
 };
 </script>

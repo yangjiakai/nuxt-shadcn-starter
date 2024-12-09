@@ -88,25 +88,31 @@ watch(
   <div class="container p-8">
     <!-- Search Panel -->
     <div
-      class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 space-y-6 mb-8"
+      class="bg-white-50 dark:bg-gray-800 rounded-lg p-2 shadow-sm border mb-5"
     >
-      <div class="flex items-center space-x-4">
-        <div class="relative w-full">
+      <!-- Filters Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-2">
+        <!-- Search Input -->
+        <div class="relative">
           <Input
             v-model="searchParams.q"
             placeholder="搜索图片..."
-            class="pl-10"
+            class="pl-9 border border-dashed"
+            type="text"
           />
-          <span class="absolute left-3 top-1/2 transform -translate-y-1/2">
-            <Icon name="lucide:search" class="h-4 w-4 text-gray-500" />
-          </span>
+          <Icon
+            name="heroicons:magnifying-glass"
+            class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          />
         </div>
-        <Button @click="handleSearch">搜索</Button>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Categories Filter -->
         <Select v-model="searchParams.categories">
-          <SelectTrigger>
+          <SelectTrigger class="bg-background/50 border-dashed">
+            <Icon
+              name="heroicons:squares-2x2"
+              class="w-4 h-4 mr-2 text-muted-foreground"
+            />
             <SelectValue placeholder="选择类别" />
           </SelectTrigger>
           <SelectContent>
@@ -116,8 +122,13 @@ watch(
           </SelectContent>
         </Select>
 
+        <!-- Content Rating Filter -->
         <Select v-model="searchParams.purity">
-          <SelectTrigger>
+          <SelectTrigger class="bg-background/50 border-dashed">
+            <Icon
+              name="heroicons:shield-check"
+              class="w-4 h-4 mr-2 text-muted-foreground"
+            />
             <SelectValue placeholder="内容分级" />
           </SelectTrigger>
           <SelectContent>
@@ -127,8 +138,13 @@ watch(
           </SelectContent>
         </Select>
 
+        <!-- Sorting Filter -->
         <Select v-model="searchParams.sorting">
-          <SelectTrigger>
+          <SelectTrigger class="bg-background/50 border-dashed">
+            <Icon
+              name="heroicons:bars-arrow-down"
+              class="w-4 h-4 mr-2 text-muted-foreground"
+            />
             <SelectValue placeholder="排序方式" />
           </SelectTrigger>
           <SelectContent>
@@ -141,8 +157,13 @@ watch(
           </SelectContent>
         </Select>
 
+        <!-- Order Filter -->
         <Select v-model="searchParams.order">
-          <SelectTrigger>
+          <SelectTrigger class="bg-background/50 border-dashed">
+            <Icon
+              name="heroicons:arrows-up-down"
+              class="w-4 h-4 mr-2 text-muted-foreground"
+            />
             <SelectValue placeholder="排序顺序" />
           </SelectTrigger>
           <SelectContent>
@@ -151,8 +172,13 @@ watch(
           </SelectContent>
         </Select>
 
+        <!-- Top Range Filter -->
         <Select v-model="searchParams.topRange">
-          <SelectTrigger>
+          <SelectTrigger class="bg-background/50 border-dashed">
+            <Icon
+              name="heroicons:clock"
+              class="w-4 h-4 mr-2 text-muted-foreground"
+            />
             <SelectValue placeholder="热门时间范围" />
           </SelectTrigger>
           <SelectContent>
@@ -166,9 +192,19 @@ watch(
           </SelectContent>
         </Select>
 
+        <!-- Resolution Settings -->
         <Popover>
           <PopoverTrigger>
-            <Button variant="outline" class="w-full">分辨率设置</Button>
+            <Button
+              variant="outline"
+              class="w-full bg-background/50 border-dashed"
+            >
+              <Icon
+                name="heroicons:rectangle-stack"
+                class="w-4 h-4 mr-2 text-muted-foreground"
+              />
+              分辨率设置
+            </Button>
           </PopoverTrigger>
           <PopoverContent class="w-80">
             <div class="space-y-4">
@@ -181,7 +217,7 @@ watch(
                 />
               </div>
               <div>
-                <Label for="resolutions">精确分辨率</Label>
+                <Label for="resolutions">指定分辨率</Label>
                 <Input
                   id="resolutions"
                   v-model="searchParams.resolutions"
@@ -193,42 +229,41 @@ watch(
                 <Input
                   id="ratios"
                   v-model="searchParams.ratios"
-                  placeholder="例如: 16x9,4x3"
+                  placeholder="例如: 16x9,16x10"
                 />
               </div>
             </div>
           </PopoverContent>
         </Popover>
+
+        <!-- Reset Button -->
+        <Button
+          variant="outline"
+          @click="
+            searchParams = {
+              q: '',
+              categories: '101',
+              purity: '',
+              sorting: 'date_added',
+              order: 'desc',
+              page: 1,
+              atleast: '',
+              resolutions: '',
+              ratios: '',
+              colors: '',
+              seed: '',
+              topRange: '1d',
+            }
+          "
+          class="border border-dashed"
+        >
+          <Icon name="heroicons:arrow-path" class="w-4 h-4" />
+          Reset Filters
+        </Button>
       </div>
 
-      <div>
-        <Label for="colors">颜色选择</Label>
-        <Input
-          id="colors"
-          v-model="searchParams.colors"
-          placeholder="输入颜色代码，例如: 660000,cc6600"
-        />
-      </div>
-
-      <div class="flex items-center justify-between">
-        <Label for="page">页码</Label>
-        <Input
-          id="page"
-          type="number"
-          v-model="searchParams.page"
-          class="w-20"
-          :min="1"
-        />
-      </div>
-
-      <div>
-        <Label for="seed">随机种子</Label>
-        <Input
-          id="seed"
-          v-model="searchParams.seed"
-          placeholder="输入随机种子"
-        />
-      </div>
+      <!-- Additional Filters -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-2"></div>
     </div>
 
     <Waterfallflow :images="wallPapers" :loading="isLoading" />
