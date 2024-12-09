@@ -26,4 +26,9 @@ export default defineNuxtConfig({
     pexelsApiKey: process.env.PEXELS_API_KEY,
     wallhavenApiKey: process.env.WALLHEAVEN_API_KEY,
   },
+  app: {
+    head: {
+      title: "WallPaper Gallery",
+    },
+  },
 });
