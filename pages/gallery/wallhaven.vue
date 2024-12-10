@@ -98,11 +98,17 @@ const loadMore = async () => {
   if (!hasMore.value || isLoading.value) return;
 
   try {
-    searchParams.value.page++;
+    searchParams.value = {
+      ...searchParams.value,
+      page: (searchParams.value.page ?? 1) + 1,
+    };
     await refresh();
   } catch (err) {
     console.error("Error loading more wallpapers:", err);
-    searchParams.value.page--;
+    searchParams.value = {
+      ...searchParams.value,
+      page: Math.max((searchParams.value.page ?? 1) - 1, 1),
+    };
     hasMore.value = false;
   }
 };
@@ -155,6 +161,9 @@ watch(
 
 <template>
   <div class="container p-8">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold">WallHaven Photos</h1>
+    </div>
     <!-- Search Panel -->
     <div
       class="bg-white-50 dark:bg-gray-900 rounded-lg p-2 shadow-sm border mb-5"

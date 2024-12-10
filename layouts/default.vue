@@ -71,7 +71,7 @@ const navigationItems = [
   // waterfallflow
   {
     name: "WaterfallFlow",
-    path: "/flow",
+    path: "/gallery",
     icon: "lucide:image",
   },
   {

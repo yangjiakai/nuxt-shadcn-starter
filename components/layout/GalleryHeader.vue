@@ -15,22 +15,22 @@ const isMenuOpen = ref(false);
 const mainMenu = ref([
   {
     text: "home",
-    link: "/",
+    link: "/gallery",
     icon: "solar:widget-add-bold-duotone",
   },
   {
     text: "unpslash",
-    link: "/unsplashGallery",
+    link: "/gallery/unsplash",
     icon: "solar:gallery-add-line-duotone",
   },
   {
     text: "pexels",
-    link: "/pexelsGallery",
+    link: "/gallery/pexels",
     icon: "solar:gallery-edit-bold-duotone",
   },
   {
     text: "wallhaven",
-    link: "/wallhavenGallery",
+    link: "/gallery/wallhaven",
     icon: "solar:gallery-edit-bold-duotone",
   },
 ]);
